@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="baylog_favicon_blank.png" />
   <style>
     /* ─── RESET & BASE ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -650,12 +651,7 @@
   <!-- ═══ NAV ═══ -->
   <nav>
     <a href="#" class="nav-logo">
-      <!-- Logo mark: two overlapping squares -->
-      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="2" width="18" height="18" rx="2" fill="#4F6D7A" />
-        <rect x="12" y="12" width="18" height="18" rx="2" fill="#EFA071" opacity="0.92"/>
-      </svg>
-      <span class="nav-wordmark">Bay<span>Log</span></span>
+      <img src="baylog_logo_blank.png" alt="BayLog" style="height:36px; width:auto;" />
     </a>
     <div class="nav-actions">
       <a href="#features" class="btn-ghost">Features</a>
@@ -873,33 +869,21 @@
   <footer>
     <div class="footer-left">
       <a href="#" class="nav-logo" style="text-decoration:none;">
-        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="2" width="18" height="18" rx="2" fill="#4F6D7A" />
-          <rect x="12" y="12" width="18" height="18" rx="2" fill="#EFA071" opacity="0.92"/>
-        </svg>
-        <span class="nav-wordmark" style="font-size:1.1rem;">Bay<span>Log</span></span>
+        <img src="baylog_logo_blank.png" alt="BayLog" style="height:28px; width:auto;" />
       </a>
       <span class="footer-copy" style="margin-left:16px;">© 2025 BayLog. All rights reserved.</span>
     </div>
     <div class="footer-links">
       <a href="https://baylog.base44.app" target="_blank" rel="noopener">Sign In</a>
-      <a href="mailto:support@baylog.app">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#fc8f898c8c938e88bc9e9d8590939bd29d8c8c">Contact</a>
     </div>
   </footer>
 
   <!-- ─── SCROLL REVEAL ─── -->
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
-  </script>
-
-</body>
-</html>
+          observer.un
