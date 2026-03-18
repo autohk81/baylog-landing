@@ -3,887 +3,742 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BayLog — Work Hour Tracking for Collision Repair Shops</title>
-  <meta name="description" content="BayLog helps collision repair shops track technician hours by RO number, manage pay periods, and export reports — all in one place." />
+  <title>BayLog — Hour Tracking for Collision Repair Shops</title>
+  <meta name="description" content="BayLog helps collision repair shop managers track technician hours, manage pay periods, and export payroll reports — built specifically for the body shop floor." />
+  <link rel="icon" type="image/png" href="baylog_favicon_blank.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="baylog_favicon_blank.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    /* ─── RESET & BASE ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary:   #4F6D7A;
-      --primary-light: #6B8FA0;
-      --accent:    #EFA071;
-      --accent-dark: #D4834E;
-      --dark:      #2C3440;
-      --dark-2:    #1E2530;
-      --dark-3:    #141920;
-      --bg:        #F5F7FA;
-      --text:      #2C3440;
-      --text-muted: #6B7280;
-      --border:    rgba(79,109,122,0.18);
-      --rule:      rgba(79,109,122,0.12);
+      --primary:       #4F6D7A;
+      --primary-dark:  #3A5260;
+      --primary-pale:  #EEF3F5;
+      --accent:        #EFA071;
+      --accent-dark:   #D4834E;
+      --accent-pale:   #FDF3EC;
+      --dark:          #1A2530;
+      --text:          #2C3A44;
+      --muted:         #6B7E8A;
+      --light:         #F7F9FA;
+      --border:        #E2E8EC;
+      --white:         #FFFFFF;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Barlow', sans-serif;
-      background: var(--dark-3);
-      color: #E8EDF2;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--white);
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    /* ─── GRID TEXTURE ─── */
-    body::before {
+    /* HERO BG */
+    .hero-bg {
+      position: relative;
+      overflow: hidden;
+      background: #FFFFFF;
+    }
+
+    .hero-bg::before {
       content: '';
-      position: fixed;
+      position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(79,109,122,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(79,109,122,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
+      background:
+        radial-gradient(ellipse 70% 55% at 75% 10%, rgba(79,109,122,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 35% at 95% 85%, rgba(239,160,113,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 5% 60%, rgba(79,109,122,0.05) 0%, transparent 55%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ─── NAV ─── */
+    /* Automotive: diagonal speed lines */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -55deg,
+          transparent,
+          transparent 38px,
+          rgba(79,109,122,0.13) 38px,
+          rgba(79,109,122,0.13) 39px
+        ),
+        repeating-linear-gradient(
+          35deg,
+          transparent,
+          transparent 58px,
+          rgba(79,109,122,0.07) 58px,
+          rgba(79,109,122,0.07) 59px
+        );
+      pointer-events: none;
+      z-index: 0;
+      mask-image: radial-gradient(ellipse 90% 90% at 60% 40%, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 90% at 60% 40%, black 20%, transparent 75%);
+    }
+
+    .hero-bg > * { position: relative; z-index: 1; }
+
+    /* NAV */
     nav {
-      position: fixed;
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
       z-index: 100;
+      background: #2C3440;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 5%;
+      height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5%;
-      height: 64px;
-      background: rgba(20,25,32,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    .nav-logo img { height: 34px; width: auto; display: block; }
 
-    /* SVG logo mark: two overlapping squares */
-    .logo-mark {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
 
-    .nav-wordmark {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: 1.5rem;
-      letter-spacing: 0.04em;
-      color: #E8EDF2;
-      text-transform: uppercase;
-    }
-
-    .nav-wordmark span {
-      color: var(--accent);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .btn-ghost {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 600;
+    .nav-link {
       font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(232,237,242,0.65);
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
       text-decoration: none;
-      padding: 6px 0;
       transition: color 0.2s;
     }
-    .btn-ghost:hover { color: #E8EDF2; }
+    .nav-link:hover { color: rgba(255,255,255,0.95); }
 
-    .btn-primary {
-      font-family: 'Barlow Condensed', sans-serif;
+    .btn-nav {
+      font-size: 0.85rem;
       font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dark-3);
-      background: var(--accent);
-      border: none;
-      border-radius: 3px;
-      padding: 9px 22px;
-      cursor: pointer;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 8px 18px;
       text-decoration: none;
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       transition: background 0.2s, transform 0.15s;
     }
-    .btn-primary:hover {
-      background: var(--accent-dark);
-      transform: translateY(-1px);
-    }
+    .btn-nav:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
 
-    /* ─── HERO ─── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 100px 5% 80px;
-      overflow: hidden;
-    }
-
-    /* Diagonal accent bar */
-    .hero::after {
-      content: '';
-      position: absolute;
-      top: -80px;
-      right: -120px;
-      width: 520px;
-      height: 520px;
-      background: radial-gradient(ellipse at center, rgba(79,109,122,0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 600;
-      font-size: 0.8rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 18px;
-      display: flex;
+    /* HERO */
+    .hero-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 5%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
       align-items: center;
-      gap: 10px;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      display: block;
-      width: 32px;
-      height: 2px;
-      background: var(--accent);
     }
 
-    .hero-headline {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3rem, 7vw, 6rem);
-      line-height: 0.95;
-      letter-spacing: -0.01em;
-      text-transform: uppercase;
-      color: #E8EDF2;
-      max-width: 820px;
-      margin-bottom: 28px;
-    }
-
-    .hero-headline em {
-      font-style: normal;
-      color: var(--accent);
-    }
-
-    .hero-sub {
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: rgba(232,237,242,0.6);
-      max-width: 480px;
-      line-height: 1.65;
-      margin-bottom: 44px;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary-lg {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dark-3);
-      background: var(--accent);
-      border: none;
-      border-radius: 3px;
-      padding: 14px 36px;
-      cursor: pointer;
-      text-decoration: none;
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(239,160,113,0.28);
-    }
-    .btn-primary-lg:hover {
-      background: var(--accent-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(239,160,113,0.38);
-    }
-    .btn-primary-lg svg { flex-shrink: 0; }
-
-    .hero-note {
-      font-size: 0.82rem;
-      color: rgba(232,237,242,0.35);
-      letter-spacing: 0.04em;
-    }
-
-    /* ─── STAT BAND ─── */
-    .stat-band {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: rgba(44,52,64,0.5);
-      padding: 40px 5%;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0;
-    }
-
-    .stat-item {
-      padding: 10px 32px;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:first-child { padding-left: 0; }
-    .stat-item:last-child { border-right: none; }
-
-    .stat-number {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: 2.4rem;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: rgba(232,237,242,0.45);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    /* ─── SECTIONS ─── */
-    section {
-      position: relative;
-      z-index: 1;
-      padding: 96px 5%;
-    }
-
-    .section-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 600;
-      font-size: 0.75rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--primary-light);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--primary-light);
-    }
-
-    .section-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1;
-      text-transform: uppercase;
-      color: #E8EDF2;
-      margin-bottom: 16px;
-    }
-    .section-title em {
-      font-style: normal;
-      color: var(--accent);
-    }
-
-    .section-body {
-      font-size: 1rem;
-      color: rgba(232,237,242,0.5);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 56px;
-    }
-
-    /* ─── FEATURES ─── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .feature-card {
-      background: rgba(20,25,32,0.95);
-      padding: 36px 32px;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.25s;
-    }
-    .feature-card:hover {
-      background: rgba(30,37,48,0.98);
-    }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 0;
-      background: var(--accent);
-      transition: height 0.35s ease;
-    }
-    .feature-card:hover::before {
-      height: 100%;
-    }
-
-    .feature-icon {
-      width: 42px;
-      height: 42px;
-      background: rgba(79,109,122,0.15);
-      border: 1px solid rgba(79,109,122,0.25);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: var(--accent);
-    }
-
-    .feature-title {
-      font-family: 'Barlow Condensed', sans-serif;
+      background: var(--accent-pale);
+      border: 1px solid rgba(239,160,113,0.3);
+      color: var(--accent-dark);
+      font-size: 0.78rem;
       font-weight: 700;
-      font-size: 1.15rem;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #E8EDF2;
-      margin-bottom: 10px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 22px;
     }
-
-    .feature-desc {
-      font-size: 0.9rem;
-      color: rgba(232,237,242,0.45);
-      line-height: 1.65;
-    }
-
-    .feature-tag {
-      display: inline-block;
-      margin-top: 16px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--primary-light);
-      background: rgba(79,109,122,0.12);
-      border: 1px solid rgba(79,109,122,0.2);
-      padding: 3px 8px;
-      border-radius: 2px;
-    }
-
-    /* ─── HOW IT WORKS ─── */
-    .hiw-section {
-      background: rgba(44,52,64,0.25);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hiw-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 48px;
-      counter-reset: step;
-    }
-
-    .hiw-step {
-      counter-increment: step;
-      position: relative;
-    }
-
-    .hiw-step-num {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: 5rem;
-      line-height: 1;
-      color: rgba(79,109,122,0.12);
-      letter-spacing: -0.04em;
-      position: absolute;
-      top: -12px;
-      left: -8px;
-      user-select: none;
-    }
-
-    .hiw-content {
-      padding-top: 36px;
-    }
-
-    .hiw-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1.25rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #E8EDF2;
-      margin-bottom: 10px;
-    }
-
-    .hiw-desc {
-      font-size: 0.9rem;
-      color: rgba(232,237,242,0.45);
-      line-height: 1.7;
-    }
-
-    /* ─── ROLES ─── */
-    .roles-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .role-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      background: rgba(44,52,64,0.6);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .role-pill:hover {
-      border-color: rgba(79,109,122,0.4);
-      background: rgba(44,52,64,0.9);
-    }
-
-    .role-dot {
-      width: 8px;
-      height: 8px;
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
       border-radius: 50%;
-      flex-shrink: 0;
+      background: var(--accent);
     }
 
-    .role-name {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(232,237,242,0.75);
+    .hero-title {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.12;
+      color: var(--dark);
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+    .hero-title span { color: var(--primary); }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 420px;
     }
 
-    .role-desc {
-      font-size: 0.8rem;
-      color: rgba(232,237,242,0.35);
-      margin-left: 2px;
-    }
+    .hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
-    /* ─── CTA SECTION ─── */
-    .cta-section {
-      text-align: center;
-      padding: 100px 5%;
-      background: linear-gradient(180deg, transparent 0%, rgba(79,109,122,0.06) 100%);
-    }
-
-    .cta-section .section-label {
-      justify-content: center;
-    }
-    .cta-section .section-label::before { display: none; }
-
-    .cta-section .section-title {
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 640px;
-    }
-
-    .cta-section .section-body {
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-    }
-
-    .cta-group {
-      display: flex;
-      justify-content: center;
+    .btn-primary {
+      display: inline-flex;
       align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 13px 26px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(239,160,113,0.35);
+    }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,160,113,0.4); }
+
+    .btn-ghost {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+    .btn-ghost:hover { gap: 10px; }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 40px rgba(79,109,122,0.1);
     }
 
-    /* ─── FOOTER ─── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 40px 5%;
+    .mv-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      background: rgba(20,25,32,0.8);
+      margin-bottom: 16px;
     }
+    .mv-title { font-size: 0.84rem; font-weight: 700; color: var(--dark); }
+    .mv-badge { font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-pale); padding: 3px 10px; border-radius: 100px; }
 
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .mv-table { width: 100%; border-collapse: collapse; }
+    .mv-table th { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    .mv-table td { font-size: 0.8rem; padding: 9px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .mv-table tr:last-child td { border-bottom: none; }
+    .mv-name { font-weight: 600; }
+    .mv-hours { font-weight: 700; color: var(--primary); text-align: center; }
+    .mv-ro { color: var(--muted); font-size: 0.74rem; }
+    .mv-tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .mv-tag.b { background: var(--primary-pale); color: var(--primary); }
+    .mv-tag.p { background: var(--accent-pale); color: var(--accent-dark); }
 
-    .footer-copy {
-      font-size: 0.82rem;
-      color: rgba(232,237,242,0.28);
-      letter-spacing: 0.04em;
-    }
+    .mv-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 14px; }
+    .mv-stat { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+    .mv-stat-n { font-size: 1.2rem; font-weight: 800; color: var(--dark); line-height: 1; }
+    .mv-stat-l { font-size: 0.66rem; color: var(--muted); margin-top: 3px; }
 
-    .footer-links {
-      display: flex;
-      gap: 24px;
+    /* PROOF BAR */
+    .proof-bar {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 22px 5%;
+      text-align: center;
     }
+    .proof-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+    .proof-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .proof-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 100px; padding: 7px 16px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text);
+    }
+    .proof-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 
-    .footer-links a {
-      font-size: 0.82rem;
-      color: rgba(232,237,242,0.35);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: rgba(232,237,242,0.7); }
+    /* SECTIONS */
+    .section { padding: 80px 5%; max-width: 1100px; margin: 0 auto; }
+    .section-hdr { text-align: center; margin-bottom: 48px; }
+    .eyebrow { display: inline-block; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .s-title { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 800; color: var(--dark); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; }
+    .s-sub { font-size: 0.97rem; color: var(--muted); line-height: 1.7; max-width: 500px; margin: 0 auto; }
 
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* FEATURES */
+    .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .feat-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 26px;
+      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
     }
+    .feat-card:hover { box-shadow: 0 8px 32px rgba(79,109,122,0.1); transform: translateY(-3px); border-color: rgba(79,109,122,0.4); }
+    .feat-icon { width: 42px; height: 42px; background: var(--primary-pale); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--primary); }
+    .feat-title { font-size: 0.95rem; font-weight: 700; color: var(--dark); margin-bottom: 7px; }
+    .feat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
 
-    .fade-up {
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards;
-    }
-    .fade-up-1 { animation-delay: 0.1s; }
-    .fade-up-2 { animation-delay: 0.25s; }
-    .fade-up-3 { animation-delay: 0.4s; }
-    .fade-up-4 { animation-delay: 0.55s; }
+    /* HOW IT WORKS */
+    .hiw { background: var(--light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 5%; }
+    .hiw-inner { max-width: 1100px; margin: 0 auto; }
+    .hiw-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; position: relative; }
+    .hiw-steps::before { content: ''; position: absolute; top: 21px; left: 12%; right: 12%; height: 1px; background: var(--border); z-index: 0; }
+    .hiw-step { text-align: center; position: relative; z-index: 1; }
+    .hiw-num { width: 42px; height: 42px; background: var(--primary); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.88rem; font-weight: 800; margin: 0 auto 14px; }
+    .hiw-t { font-size: 0.92rem; font-weight: 700; color: var(--dark); margin-bottom: 7px; }
+    .hiw-d { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
 
-    /* Scroll-triggered */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* ROLES */
+    .roles-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .role-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 12px; transition: border-color 0.2s; }
+    .role-card:hover { border-color: var(--primary); }
+    .role-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .role-name { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+    .role-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
-      .stat-band {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 8px; }
-      .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
-      .stat-item:last-child, .stat-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
-
-      footer {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .nav-wordmark { font-size: 1.2rem; }
+    /* CTA */
+    .cta-band { background: var(--primary); padding: 72px 5%; text-align: center; }
+    .cta-inner { max-width: 580px; margin: 0 auto; }
+    .cta-title { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800; color: var(--white); letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.15; }
+    .cta-sub { font-size: 0.97rem; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 28px; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.95rem; font-weight: 700; color: var(--primary);
+      background: var(--white); border: none; border-radius: 10px;
+      padding: 13px 28px; text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
-    @media (max-width: 480px) {
-      .hero-cta-group { flex-direction: column; align-items: flex-start; }
-      .features-grid { gap: 0; }
-    }
+    /* FOOTER */
+    footer { background: var(--dark); padding: 32px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    .footer-logo img { height: 26px; width: auto; }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: rgba(255,255,255,0.75); }
 
-    /* ─── HIGHLIGHT PANEL ─── */
-    .highlight-panel {
-      position: relative;
-      background: rgba(79,109,122,0.08);
-      border: 1px solid rgba(79,109,122,0.2);
-      border-left: 3px solid var(--accent);
-      padding: 28px 32px;
-      margin-top: 56px;
-      border-radius: 2px;
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fu { opacity:0; animation: fadeUp 0.65s ease forwards; }
+    .d1{animation-delay:.05s} .d2{animation-delay:.15s} .d3{animation-delay:.25s} .d4{animation-delay:.35s} .d5{animation-delay:.45s}
+    .reveal { opacity:0; transform:translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      .hero-wrap { grid-template-columns:1fr; gap:36px; }
+      .feat-grid { grid-template-columns:repeat(2,1fr); }
+      .hiw-steps { grid-template-columns:repeat(2,1fr); }
+      .hiw-steps::before { display:none; }
+      .roles-grid { grid-template-columns:repeat(2,1fr); }
     }
-    .highlight-panel p {
-      font-size: 0.95rem;
-      color: rgba(232,237,242,0.55);
-      line-height: 1.7;
-    }
-    .highlight-panel strong {
-      color: rgba(232,237,242,0.85);
-      font-weight: 500;
+    @media(max-width:560px) {
+      .feat-grid, .roles-grid, .hiw-steps { grid-template-columns:1fr; }
+      .nav-right .nav-link { display:none; }
+      footer { flex-direction:column; align-items:flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══ NAV ═══ -->
+  <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">
-      <img src="baylog logo blank.png" alt="BayLog" style="height:36px; width:auto;" />
+      <img src="baylog logo blank.png" alt="BayLog" />
     </a>
-    <div class="nav-actions">
-      <a href="#features" class="btn-ghost">Features</a>
-      <a href="https://app.baylog.app" class="btn-primary" target="_blank" rel="noopener">Sign In</a>
+    <div class="nav-right">
+      <a href="https://app.baylog.app" class="btn-nav" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
+        Log In
+      </a>
     </div>
   </nav>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero">
-    <p class="hero-eyebrow fade-up fade-up-1">Collision Repair Shop Software</p>
-    <h1 class="hero-headline fade-up fade-up-2">
-      Track Every<br/><em>Hour.</em><br/>Every Shop.
-    </h1>
-    <p class="hero-sub fade-up fade-up-3">
-      BayLog is purpose-built for automotive collision repair. Log technician hours by RO number, manage pay periods, and export reports — all in one place.
-    </p>
-    <div class="hero-cta-group fade-up fade-up-4">
-      <a href="https://app.baylog.app" class="btn-primary-lg" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
-        Sign In to BayLog
-      </a>
-      <span class="hero-note">No credit card required for pilot access</span>
-    </div>
-  </section>
+  <!-- HERO -->
+  <div class="hero-bg">
 
-  <!-- ═══ STAT BAND ═══ -->
-  <div class="stat-band reveal">
-    <div class="stat-item">
-      <div class="stat-number">RO</div>
-      <div class="stat-label">Repair Order–Based Logging</div>
+  <div style="max-width:1100px;margin:0 auto;padding:0 5%;">
+    <div class="hero-wrap" style="padding-left:0;padding-right:0;">
+
+      <div>
+        <p class="fu d1" style="font-size:0.75rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;">Work Hour Tracking &nbsp;·&nbsp; Collision Repair</p>
+        <h1 class="hero-title fu d2" style="font-size:clamp(2.6rem,5vw,3.8rem);line-height:1.05;">
+          Every RO.<br/>
+          Every Hour.<br/>
+          <span style="color:var(--accent);">Accounted For.</span>
+        </h1>
+        <div class="fu d3" style="width:48px;height:3px;background:var(--primary);border-radius:2px;margin:24px 0;"></div>
+        <p class="hero-sub fu d4" style="font-size:0.97rem;color:var(--muted);line-height:1.75;max-width:400px;">
+          One place to see who worked, what RO, and how many hours — every pay period, every time.
+        </p>
+        <div class="hero-cta fu d5">
+          <a href="https://app.baylog.app" class="btn-primary" target="_blank" rel="noopener">
+            Get Started
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual fu d5">
+        <!-- Header bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div>
+            <div style="font-size:0.95rem;font-weight:800;color:var(--dark);">Work Hours</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:1px;">Time Tracking & Pay Calculation · Mike T.</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <div style="font-size:0.68rem;font-weight:600;color:var(--muted);background:var(--light);border:1px solid var(--border);border-radius:6px;padding:5px 10px;">2026-02-17 ~ 03-02</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--white);background:var(--primary);border-radius:6px;padding:5px 10px;">Export PDF</div>
+          </div>
+        </div>
+
+        <!-- Scoreboard -->
+        <div style="background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;gap:20px;">
+            <div style="font-size:0.78rem;color:var(--muted);">Paint <strong style="color:var(--primary);">46.1h</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted);">Denib <strong style="color:#7FA89B;">1.7h</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted);">Body <strong style="color:var(--text);">0h</strong></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.62rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;">Total</div>
+            <div style="font-size:1.4rem;font-weight:800;color:var(--accent);line-height:1;">47.8h</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:7px 12px;background:var(--light);border-bottom:1px solid var(--border);">
+            <div style="font-size:0.62rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">RO #</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Vehicle</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;">Paint</div>
+            <div style="font-size:0.62rem;font-weight:700;color:#7FA89B;letter-spacing:0.08em;text-transform:uppercase;">Denib</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--primary);letter-spacing:0.08em;text-transform:uppercase;">Body</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--text);letter-spacing:0.08em;text-transform:uppercase;">Total</div>
+          </div>
+          <!-- Row 1 -->
+          <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">62663</div>
+            <div style="font-size:0.76rem;color:var(--muted);">Kia · SWP</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">25h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">25h</div>
+          </div>
+          <!-- Row 2 -->
+          <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">38291</div>
+            <div style="font-size:0.76rem;color:var(--muted);">Hyundai · C5G</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">12h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">12h</div>
+          </div>
+          <!-- Row 3 -->
+          <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">51047</div>
+            <div style="font-size:0.76rem;color:var(--muted);">Tesla · PPSW</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">5.6h</div>
+            <div style="font-size:0.78rem;font-weight:600;color:#7FA89B;">1.2h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">6.8h</div>
+          </div>
+          <!-- Row 4 -->
+          <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;align-items:center;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">29874</div>
+            <div style="font-size:0.76rem;color:var(--muted);">BMW · 300Y</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">3.5h</div>
+            <div style="font-size:0.78rem;font-weight:600;color:#7FA89B;">0.5h</div>
+            <div style="font-size:0.78rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">4h</div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="stat-item">
-      <div class="stat-number">2</div>
-      <div class="stat-label">Trades: Painter & Bodyman</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number">5</div>
-      <div class="stat-label">Role Levels</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number">PDF</div>
-      <div class="stat-label">+ Excel Export</div>
+  </div>
+  </div>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar reveal">
+    <div class="proof-label">Designed around how body shops actually work</div>
+    <div class="proof-pills">
+      <div class="proof-pill"><span class="proof-dot"></span>RO-Based Logging</div>
+      <div class="proof-pill"><span class="proof-dot"></span>Pay Period Management</div>
+      <div class="proof-pill"><span class="proof-dot"></span>PDF & Excel Export</div>
+      <div class="proof-pill"><span class="proof-dot"></span>Multi-Shop Support</div>
+      <div class="proof-pill"><span class="proof-dot"></span>Role-Based Access</div>
     </div>
   </div>
 
-  <!-- ═══ FEATURES ═══ -->
-  <section id="features">
-    <div class="reveal">
-      <p class="section-label">Core Features</p>
-      <h2 class="section-title">Built for<br/><em>Body Shops</em></h2>
-      <p class="section-body">
-        Every feature in BayLog was designed specifically for the collision repair workflow — not adapted from generic HR tools.
-      </p>
-    </div>
+  <!-- APP SHOWCASE -->
+  <div style="background:var(--light);border-bottom:1px solid var(--border);padding:80px 5%;">
+    <div style="max-width:1100px;margin:0 auto;">
 
-    <div class="features-grid reveal">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="13" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 4V3M14 4V3M2 8h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <!-- Row 1: Hour Logging -->
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;">
+        <div>
+          <span class="eyebrow">Hour Logging</span>
+          <h3 style="font-size:1.7rem;font-weight:800;color:var(--dark);letter-spacing:-0.02em;line-height:1.15;margin:10px 0 14px;">Every RO logged.<br/>Zero guesswork.</h3>
+          <p style="font-size:0.92rem;color:var(--muted);line-height:1.75;">Technicians log hours directly against a Repair Order number. Paint, body, and denib hours tracked separately — so payroll is always accurate.</p>
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              RO number, vehicle, and paint code per entry
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Separate paint, denib, and body hour columns
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Stat holiday entries tracked separately
+            </div>
+          </div>
         </div>
-        <div class="feature-title">Pay Period Management</div>
-        <div class="feature-desc">Create and close pay periods with one click. Technicians log hours against each period; managers review and approve before export.</div>
-        <span class="feature-tag">Payroll-ready</span>
+        <!-- RO Table mockup -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 4px 24px rgba(79,109,122,0.08);">
+          <div style="font-size:0.8rem;font-weight:700;color:var(--dark);margin-bottom:12px;">Work Entries <span style="font-size:0.7rem;font-weight:600;color:var(--primary);background:var(--primary-pale);padding:2px 8px;border-radius:100px;margin-left:6px;">Open</span></div>
+          <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;gap:4px;padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:4px;">
+            <div style="font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">RO #</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Vehicle</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;">Paint</div>
+            <div style="font-size:0.62rem;font-weight:700;color:#7FA89B;text-transform:uppercase;letter-spacing:0.06em;">Denib</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.06em;">Body</div>
+          </div>
+          <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
+            <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">71204</div>
+            <div style="font-size:0.72rem;color:var(--muted);">Honda · NH883P</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">8h</div>
+            <div style="font-size:0.75rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.75rem;color:var(--muted);">0h</div>
+          </div>
+          <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
+            <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">68391</div>
+            <div style="font-size:0.72rem;color:var(--muted);">Toyota · 040</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">12h</div>
+            <div style="font-size:0.75rem;font-weight:600;color:#7FA89B;">1.5h</div>
+            <div style="font-size:0.75rem;color:var(--muted);">0h</div>
+          </div>
+          <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
+            <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">74512</div>
+            <div style="font-size:0.72rem;color:var(--muted);">Ford · UX</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">5h</div>
+            <div style="font-size:0.75rem;color:var(--muted);">0h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--primary);">6h</div>
+          </div>
+          <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;">
+            <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">69874</div>
+            <div style="font-size:0.72rem;color:var(--muted);">BMW · A96</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">3.5h</div>
+            <div style="font-size:0.75rem;font-weight:600;color:#7FA89B;">0.5h</div>
+            <div style="font-size:0.75rem;color:var(--muted);">0h</div>
+          </div>
+          <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--white);background:var(--primary);border-radius:6px;padding:5px 12px;cursor:pointer;">Export PDF</div>
+          </div>
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
+      <!-- Row 2: Pay Periods -->
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <!-- Pay period list mockup -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 4px 24px rgba(79,109,122,0.08);">
+          <div style="font-size:0.8rem;font-weight:700;color:var(--dark);margin-bottom:14px;">Pay Periods</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--accent-pale);border:1px solid rgba(239,160,113,0.3);border-radius:8px;margin-bottom:6px;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-03-18 ~ 03-31</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--accent-dark);background:rgba(239,160,113,0.15);padding:3px 9px;border-radius:100px;">Open</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-03-04 ~ 03-17</div>
+            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-02-17 ~ 03-03</div>
+            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;">
+            <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-02-03 ~ 02-16</div>
+            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+          </div>
+        </div>
+        <div>
+          <span class="eyebrow">Pay Periods</span>
+          <h3 style="font-size:1.7rem;font-weight:800;color:var(--dark);letter-spacing:-0.02em;line-height:1.15;margin:10px 0 14px;">Open, track, close.<br/>Repeat every period.</h3>
+          <p style="font-size:0.92rem;color:var(--muted);line-height:1.75;">Create a pay period, let your team log hours, then close and export when ready. Submitted periods are locked — no accidental edits before payroll runs.</p>
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Bi-weekly periods with one-click open/close
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Submitted periods locked from editing
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
+              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Full history grouped by year
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="features">
+    <div class="section-hdr reveal">
+      <span class="eyebrow">Features</span>
+      <h2 class="s-title">Everything a Shop Manager Needs</h2>
+      <p class="s-sub">No generic HR tools. No workarounds. BayLog was designed from the ground up for collision repair.</p>
+    </div>
+    <div class="feat-grid reveal">
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="13" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 4V2M14 4V2M2 8h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">Pay Period Management</div>
+        <div class="feat-desc">Open and close pay periods with one click. Lock submitted periods to keep payroll data clean.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2" y="3" width="16" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
-        <div class="feature-title">RO-Based Hour Logging</div>
-        <div class="feature-desc">Technicians log hours directly against a Repair Order number. Separate fields for body hours, paint hours, prep, and more.</div>
-        <span class="feature-tag">Per-technician fields</span>
+        <div class="feat-title">RO-Based Hour Logging</div>
+        <div class="feat-desc">Log hours directly against a Repair Order number. Body hours and paint hours tracked separately per technician.</div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v3M10 14v3M3 10h3M14 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
-        </div>
-        <div class="feature-title">Role-Based Access</div>
-        <div class="feature-desc">Five distinct roles: Owner, GM, Shop Manager, Accountant, and Technician. Each sees exactly what they need — nothing more.</div>
-        <span class="feature-tag">Invite system</span>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">
+      <div class="feat-card">
+        <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10.5L8.5 14 15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
-        <div class="feature-title">PDF & Excel Export</div>
-        <div class="feature-desc">Generate pay period reports as formatted PDFs or protected Excel files. Accountant role gets full export access across all shops.</div>
-        <span class="feature-tag">Sheet-protected XLS</span>
+        <div class="feat-title">PDF & Excel Export</div>
+        <div class="feat-desc">Generate clean payroll reports as PDF or protected Excel files. Ready for accounting in seconds.</div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
+      <div class="feat-card">
+        <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="7" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
-        <div class="feature-title">Multi-Shop Support</div>
-        <div class="feature-desc">Manage multiple locations under one company. Owners and GMs see all shops; shop managers are scoped to their location.</div>
-        <span class="feature-tag">Multi-location</span>
+        <div class="feat-title">Multi-Shop Support</div>
+        <div class="feat-desc">Managing more than one location? Owners and GMs see all shops. Managers stay scoped to their location.</div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
+      <div class="feat-card">
+        <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c0-3.314 2.686-5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="feature-title">Technician Portal</div>
-        <div class="feature-desc">A clean, focused interface designed for shop floor use. Technicians only see their own entries — simple, fast, no training required.</div>
-        <span class="feature-tag">Mobile-friendly</span>
+        <div class="feat-title">Role-Based Access</div>
+        <div class="feat-desc">Six roles built around how shops operate — from Owner and GM down to individual technicians.</div>
       </div>
-    </div>
-  </section>
 
-  <!-- ═══ HOW IT WORKS ═══ -->
-  <section class="hiw-section">
-    <div class="reveal">
-      <p class="section-label">How It Works</p>
-      <h2 class="section-title">Up and Running<br/><em>in Minutes</em></h2>
-      <p class="section-body">No lengthy onboarding. No IT department required.</p>
-    </div>
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 10h8M6 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 6h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">Stat Holiday Tracking</div>
+        <div class="feat-desc">Statutory holiday hours are separated in reports — so your accountant always has a complete picture.</div>
+      </div>
 
-    <div class="hiw-grid reveal">
-      <div class="hiw-step">
-        <div class="hiw-step-num">01</div>
-        <div class="hiw-content">
-          <div class="hiw-title">Set Up Your Company</div>
-          <div class="hiw-desc">Owner or GM signs up and creates the company profile. Add your shops and configure pay period settings in minutes.</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="hiw" id="how-it-works">
+    <div class="hiw-inner">
+      <div class="section-hdr reveal">
+        <span class="eyebrow">How It Works</span>
+        <h2 class="s-title">Up and Running in Minutes</h2>
+        <p class="s-sub">No IT department. No lengthy setup. Sign in and start tracking today.</p>
+      </div>
+      <div class="hiw-steps reveal">
+        <div class="hiw-step">
+          <div class="hiw-num">1</div>
+          <div class="hiw-t">Set Up Your Shop</div>
+          <div class="hiw-d">Create your company, add your locations, and set your pay period schedule.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">2</div>
+          <div class="hiw-t">Invite Your Team</div>
+          <div class="hiw-d">Send invite links to technicians and managers. Each person gets the right level of access.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">3</div>
+          <div class="hiw-t">Log Hours Daily</div>
+          <div class="hiw-d">Technicians log hours against RO numbers each day. Managers monitor in real time.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">4</div>
+          <div class="hiw-t">Export & Pay</div>
+          <div class="hiw-d">Close the pay period and export a ready-to-use PDF or Excel report for payroll.</div>
         </div>
       </div>
-      <div class="hiw-step">
-        <div class="hiw-step-num">02</div>
-        <div class="hiw-content">
-          <div class="hiw-title">Invite Your Team</div>
-          <div class="hiw-desc">Send email invites to technicians and managers. Each person gets access scoped precisely to their role and shop.</div>
-        </div>
-      </div>
-      <div class="hiw-step">
-        <div class="hiw-step-num">03</div>
-        <div class="hiw-content">
-          <div class="hiw-title">Log Hours Daily</div>
-          <div class="hiw-desc">Technicians log hours by RO number each day. Managers monitor in real time across all open pay periods.</div>
-        </div>
-      </div>
-      <div class="hiw-step">
-        <div class="hiw-step-num">04</div>
-        <div class="hiw-content">
-          <div class="hiw-title">Export at Pay Period Close</div>
-          <div class="hiw-desc">Close the pay period and generate PDF or Excel reports for payroll. Complete audit trail, every time.</div>
-        </div>
-      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ═══ ROLES ═══ -->
-  <section>
-    <div class="reveal">
-      <p class="section-label">Role-Based Access</p>
-      <h2 class="section-title">Every Role,<br/><em>Accounted For</em></h2>
-      <p class="section-body">Granular permissions built around how body shops actually operate.</p>
+  <!-- ROLES -->
+  <div class="section">
+    <div class="section-hdr reveal">
+      <span class="eyebrow">Access Control</span>
+      <h2 class="s-title">The Right Access for Every Role</h2>
+      <p class="s-sub">Each person sees exactly what they need — nothing more, nothing less.</p>
     </div>
-
     <div class="roles-grid reveal">
-      <div class="role-pill">
-        <span class="role-dot" style="background:#EFA071"></span>
-        <span class="role-name">Owner</span>
-        <span class="role-desc">Full access</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#EFA071"></div>
+        <div><div class="role-name">Owner</div><div class="role-desc">Full access across all shops and all data.</div></div>
       </div>
-      <div class="role-pill">
-        <span class="role-dot" style="background:#6B8FA0"></span>
-        <span class="role-name">General Manager</span>
-        <span class="role-desc">All shops</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#4F6D7A"></div>
+        <div><div class="role-name">General Manager</div><div class="role-desc">Manages all locations under the company.</div></div>
       </div>
-      <div class="role-pill">
-        <span class="role-dot" style="background:#7FA89B"></span>
-        <span class="role-name">Shop Manager</span>
-        <span class="role-desc">Own location</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#7FA89B"></div>
+        <div><div class="role-name">Shop Manager</div><div class="role-desc">Full control over their assigned shop only.</div></div>
       </div>
-      <div class="role-pill">
-        <span class="role-dot" style="background:#A8A87F"></span>
-        <span class="role-name">Accountant</span>
-        <span class="role-desc">Read + export</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#A8A87F"></div>
+        <div><div class="role-name">Accountant</div><div class="role-desc">Read access + export across all shops.</div></div>
       </div>
-      <div class="role-pill">
-        <span class="role-dot" style="background:#8FA06B"></span>
-        <span class="role-name">Painter</span>
-        <span class="role-desc">Own hours only</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#8FA06B"></div>
+        <div><div class="role-name">Automotive Refinisher</div><div class="role-desc">Logs and views their own paint hours only.</div></div>
       </div>
-      <div class="role-pill">
-        <span class="role-dot" style="background:#7A8FA0"></span>
-        <span class="role-name">Bodyman</span>
-        <span class="role-desc">Own hours only</span>
+      <div class="role-card">
+        <div class="role-dot" style="background:#6B8FA0"></div>
+        <div><div class="role-name">Collision Tech</div><div class="role-desc">Logs and views their own body hours only.</div></div>
       </div>
     </div>
+  </div>
 
-    <div class="highlight-panel reveal" style="max-width:680px; margin-top:48px;">
-      <p><strong>Built for the shop floor.</strong> BayLog was designed from the inside out — by someone who works in the collision repair industry. The workflows, the terminology, and the permission model all reflect how real shops operate, not how generic HR software assumes they do.</p>
-    </div>
-  </section>
-
-  <!-- ═══ CTA ═══ -->
-  <section class="cta-section">
-    <div class="reveal">
-      <p class="section-label">Get Started</p>
-      <h2 class="section-title" style="max-width:560px;">Ready to Track Every<br/><em>Hour?</em></h2>
-      <p class="section-body">Sign in to BayLog and take control of your shop's hour tracking today.</p>
-      <div class="cta-group">
-        <a href="https://app.baylog.app" class="btn-primary-lg" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
-          Sign In to BayLog
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer>
-    <div class="footer-left">
-      <a href="#" class="nav-logo" style="text-decoration:none;">
-        <img src="baylog logo blank.png" alt="BayLog" style="height:28px; width:auto;" />
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="cta-inner reveal">
+      <h2 class="cta-title">Ready to Bring Order to Your Shop Floor?</h2>
+      <p class="cta-sub">Replace spreadsheets and guesswork with a system built for the way collision repair shops actually work.</p>
+      <a href="https://app.baylog.app" class="btn-cta" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
+        Get Started with BayLog
       </a>
-      <span class="footer-copy" style="margin-left:16px;">© 2025 BayLog. All rights reserved.</span>
     </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo"><img src="baylog logo blank.png" alt="BayLog" /></a>
+    <span class="footer-copy">© 2025 BayLog. All rights reserved.</span>
     <div class="footer-links">
-      <a href="https://app.baylog.app" target="_blank" rel="noopener">Sign In</a>
-      <a href="/cdn-cgi/l/email-protection#fc8f898c8c938e88bc9e9d8590939bd29d8c8c">Contact</a>
+      <a href="https://app.baylog.app" target="_blank" rel="noopener">Log In</a>
     </div>
   </footer>
 
-  <!-- ─── SCROLL REVEAL ─── -->
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.un
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classLis
