@@ -271,6 +271,7 @@
 
     /* FEATURES */
     .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .feat-grid .feat-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; max-width: 380px; }
     .feat-card {
       background: var(--white); border: 1px solid var(--border);
       border-radius: 14px; padding: 26px;
@@ -593,41 +594,25 @@
   <div class="section" id="features">
     <div class="section-hdr reveal">
       <span class="eyebrow">Features</span>
-      <h2 class="s-title">Everything a Shop Manager Needs</h2>
-      <p class="s-sub">No generic HR tools. No workarounds. BayLog was designed from the ground up for collision repair.</p>
+      <h2 class="s-title">Built for the Shop Floor</h2>
+      <p class="s-sub">Every feature in BayLog was designed around how collision repair shops actually operate — not adapted from generic HR tools.</p>
     </div>
     <div class="feat-grid reveal">
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">Work Hour Tracking</div>
+        <div class="feat-desc">Log hours by RO number, vehicle, and paint code. Paint, body, and denib hours tracked separately. Auto-calculated totals. Mobile-optimized for shop floor entry.</div>
+      </div>
 
       <div class="feat-card">
         <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="13" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 4V2M14 4V2M2 8h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
         <div class="feat-title">Pay Period Management</div>
-        <div class="feat-desc">Open and close pay periods with one click. Lock submitted periods to keep payroll data clean.</div>
-      </div>
-
-      <div class="feat-card">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2" y="3" width="16" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </div>
-        <div class="feat-title">RO-Based Hour Logging</div>
-        <div class="feat-desc">Log hours directly against a Repair Order number. Body hours and paint hours tracked separately per technician.</div>
-      </div>
-
-      <div class="feat-card">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10.5L8.5 14 15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
-        </div>
-        <div class="feat-title">PDF & Excel Export</div>
-        <div class="feat-desc">Generate clean payroll reports as PDF or protected Excel files. Ready for accounting in seconds.</div>
-      </div>
-
-      <div class="feat-card">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="7" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="7" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
-        </div>
-        <div class="feat-title">Multi-Shop Support</div>
-        <div class="feat-desc">Managing more than one location? Owners and GMs see all shops. Managers stay scoped to their location.</div>
+        <div class="feat-desc">Bi-weekly pay periods with technician submit → manager review workflow. PDF and Excel export for accountants. Period notes included.</div>
       </div>
 
       <div class="feat-card">
@@ -635,15 +620,39 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c0-3.314 2.686-5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="feat-title">Role-Based Access</div>
-        <div class="feat-desc">Six roles built around how shops operate — from Owner and GM down to individual technicians.</div>
+        <div class="feat-desc">Six roles: Owner, GM, Shop Manager, Accountant, Painter, and Collision Tech. Each sees only what they need. Multi-shop and multi-company supported.</div>
       </div>
 
       <div class="feat-card">
         <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 10h8M6 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 6h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 14l4-4 3 3 4-5 4 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
-        <div class="feat-title">Stat Holiday Tracking</div>
-        <div class="feat-desc">Statutory holiday hours are separated in reports — so your accountant always has a complete picture.</div>
+        <div class="feat-title">Performance Insights</div>
+        <div class="feat-desc">Technician hour summaries and shop-wide comparisons. Personal best achievement tracking. Monthly Productivity Report in PDF.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L10 6M10 14L10 18M2 10L6 10M14 10L18 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="feat-title">Vacation Pay</div>
+        <div class="feat-desc">Technicians request vacation pay directly in the app. Manager signs off, accountant processes and records payment. PDF output included.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2a6 6 0 0 1 6 6c0 4-6 10-6 10S4 12 4 8a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="feat-title">Smart Notifications</div>
+        <div class="feat-desc">Role-specific NEW indicators, Watch List alerts for ROs needing updates, and vacation pay request notifications — all tailored to each user's role.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h8M4 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2" y="3" width="16" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M13 6l2 2-2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-title">Easy Onboarding</div>
+        <div class="feat-desc">Invite techs and managers by email link. Company and shop structure auto-configured. Multi-company support built in from day one.</div>
       </div>
 
     </div>
@@ -732,8 +741,10 @@
   <!-- FOOTER -->
   <footer>
     <a href="#" class="footer-logo"><img src="baylog logo blank.png" alt="BayLog" /></a>
-    <span class="footer-copy">© 2026 BayLog. All rights reserved.</span>
+    <span class="footer-copy">© 2025 BayLog. All rights reserved.</span>
     <div class="footer-links">
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
       <a href="https://app.baylog.app" target="_blank" rel="noopener">Log In</a>
     </div>
   </footer>
