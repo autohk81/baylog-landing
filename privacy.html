@@ -141,7 +141,9 @@
       <li><strong>Account information:</strong> Name, email address, and role within your shop.</li>
       <li><strong>Work data:</strong> Repair Order (RO) numbers, vehicle information, paint codes, and hours logged by technicians.</li>
       <li><strong>Company and shop information:</strong> Shop name, location, and pay period settings.</li>
-      <li><strong>Usage data:</strong> Log-in activity and general app usage patterns.</li>
+      <li><strong>Vacation Pay data:</strong> Request dates, payment amounts, desired payment dates, and digital signatures submitted as part of vacation pay requests.</li>
+      <li><strong>Manager communications:</strong> Notes and responses written by managers in connection with flagged work entries.</li>
+      <li><strong>Usage data:</strong> Log-in activity, device type (mobile or desktop), and general app usage patterns.</li>
     </ul>
     <p>We do not collect payment card information directly. Payments are handled by Stripe, which has its own privacy policy.</p>
 
@@ -150,6 +152,7 @@
     <ul>
       <li>Provide and operate the BayLog application and its features.</li>
       <li>Enable pay period management and payroll report generation.</li>
+      <li>Facilitate communication between technicians and managers regarding work entry adjustments.</li>
       <li>Send account-related emails such as invitations, password resets, and notifications.</li>
       <li>Respond to support requests sent to support@baylog.app.</li>
       <li>Improve the application based on how it is used.</li>
@@ -159,21 +162,29 @@
     <h2>4. Where Your Data Is Stored</h2>
     <p>BayLog is built on the Base44 platform. Your data is stored on Base44's servers, which are located in the United States. By using BayLog, you consent to this cross-border transfer of data.</p>
     <p>Base44 maintains industry-standard security practices including encryption and secure user management. For more details, see <a href="https://base44.com/privacy-policy" target="_blank" rel="noopener">Base44's Privacy Policy</a>.</p>
+    <p>BayLog uses WebSocket connections to provide real-time data synchronization between users within your organization. This means certain updates — such as pay period submissions, manager responses to flagged entries, and reviewed status changes — are transmitted in real-time to authorized users in your organization as they occur.</p>
 
     <h2>5. Who Has Access to Your Data</h2>
     <p>Access to your data within BayLog is controlled by role-based permissions:</p>
     <ul>
-      <li>Technicians can only see their own work entries.</li>
-      <li>Shop Managers can see entries within their assigned shop.</li>
+      <li>Technicians can only see their own work entries and pay periods.</li>
+      <li>Shop Managers can see entries within their assigned shop and may write response notes on flagged work entries.</li>
       <li>Owners and General Managers have access across all shops under their company.</li>
-      <li>Accountants have read and export access across all shops.</li>
+      <li>Accountants have read and export access across all shops within their company.</li>
     </ul>
+    <p>BayLog's platform administrator (developer account) may access work hour data and account information across all companies for the purposes of technical support, system maintenance, and service operation. This access is limited to operational needs only.</p>
     <p>BayLog staff may access data only when required to provide support, and only with your permission.</p>
 
-    <h2>6. How Long We Keep Your Data</h2>
+    <h2>6. Digital Signatures</h2>
+    <p>When submitting a Vacation Pay Request, technicians may provide a digital signature using the in-app signature tool. This signature is captured as image data and stored within your account record. It is used solely for record-keeping and PDF document generation purposes. Digital signatures are not shared with third parties and are associated only with the specific vacation pay request for which they were provided.</p>
+
+    <h2>7. Multi-Company Access</h2>
+    <p>BayLog supports users who belong to more than one company or shop. If you accept an invitation to join a second organization, a separate profile is created for that organization. Each profile's data is kept independent and is only visible to authorized users within the respective organization.</p>
+
+    <h2>8. How Long We Keep Your Data</h2>
     <p>We retain your data for as long as your account is active. If you request account deletion, your data will be removed from our systems within 30 days, subject to any legal obligations to retain records.</p>
 
-    <h2>7. Your Rights</h2>
+    <h2>9. Your Rights</h2>
     <p>Under PIPEDA and PIPA, you have the right to:</p>
     <ul>
       <li>Access the personal information we hold about you.</li>
@@ -183,13 +194,13 @@
     </ul>
     <p>To exercise any of these rights, contact us at <a href="mailto:support@baylog.app">support@baylog.app</a>.</p>
 
-    <h2>8. Cookies</h2>
+    <h2>10. Cookies</h2>
     <p>BayLog uses session cookies to keep you logged in. We do not use tracking cookies or third-party advertising cookies.</p>
 
-    <h2>9. Changes to This Policy</h2>
+    <h2>11. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. Continued use of BayLog after changes constitutes acceptance of the updated policy.</p>
 
-    <h2>10. Contact Us</h2>
+    <h2>12. Contact Us</h2>
     <p>If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
     <p><strong>BayLog</strong><br/>British Columbia, Canada<br/><a href="mailto:support@baylog.app">support@baylog.app</a></p>
 
