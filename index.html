@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BayLog — Hour Tracking for Collision Repair Shops</title>
   <meta name="description" content="BayLog helps collision repair shop managers track technician hours, manage pay periods, and export payroll reports — built specifically for the body shop floor." />
-  <link rel="icon" type="image/png" href="baylog_favicon_blank.png" />
-  <link rel="apple-touch-icon" href="baylog_favicon_blank.png" />
+  <link rel="icon" type="image/svg+xml" href="FAVICON.svg" />
+  <link rel="apple-touch-icon" href="FAVICON.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,18 +21,22 @@
       --accent:        #EFA071;
       --accent-dark:   #D4834E;
       --accent-pale:   #FDF3EC;
-      --dark:          #1A2530;
+      --dark:          #2C3440;
       --text:          #2C3A44;
       --muted:         #6B7E8A;
       --light:         #F7F9FA;
       --border:        #E2E8EC;
       --white:         #FFFFFF;
+      /* field colors matching the app */
+      --paint:         #4F6D7A;
+      --denib:         #9B7BB8;
+      --body:          #7B8FA0;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--white);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
@@ -58,7 +62,6 @@
       z-index: 0;
     }
 
-    /* Automotive: diagonal speed lines */
     .hero-bg::after {
       content: '';
       position: absolute;
@@ -104,15 +107,6 @@
 
     .nav-right { display: flex; align-items: center; gap: 32px; }
 
-    .nav-link {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-link:hover { color: rgba(255,255,255,0.95); }
-
     .btn-nav {
       font-size: 0.85rem;
       font-weight: 700;
@@ -140,44 +134,22 @@
       align-items: center;
     }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-pale);
-      border: 1px solid rgba(239,160,113,0.3);
-      color: var(--accent-dark);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 100px;
-      margin-bottom: 22px;
-    }
-    .hero-badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
     .hero-title {
-      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-size: clamp(2.6rem, 5vw, 3.8rem);
       font-weight: 800;
-      line-height: 1.12;
+      line-height: 1.05;
       color: var(--dark);
       margin-bottom: 18px;
       letter-spacing: -0.02em;
     }
-    .hero-title span { color: var(--primary); }
+    .hero-title span { color: var(--accent); }
 
     .hero-sub {
-      font-size: 1rem;
+      font-size: 0.97rem;
       color: var(--muted);
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 32px;
-      max-width: 420px;
+      max-width: 400px;
     }
 
     .hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -199,18 +171,6 @@
     }
     .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,160,113,0.4); }
 
-    .btn-ghost {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: gap 0.2s;
-    }
-    .btn-ghost:hover { gap: 10px; }
-
     /* HERO VISUAL */
     .hero-visual {
       background: var(--light);
@@ -219,49 +179,6 @@
       padding: 24px;
       box-shadow: 0 8px 40px rgba(79,109,122,0.1);
     }
-
-    .mv-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .mv-title { font-size: 0.84rem; font-weight: 700; color: var(--dark); }
-    .mv-badge { font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-pale); padding: 3px 10px; border-radius: 100px; }
-
-    .mv-table { width: 100%; border-collapse: collapse; }
-    .mv-table th { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
-    .mv-table td { font-size: 0.8rem; padding: 9px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
-    .mv-table tr:last-child td { border-bottom: none; }
-    .mv-name { font-weight: 600; }
-    .mv-hours { font-weight: 700; color: var(--primary); text-align: center; }
-    .mv-ro { color: var(--muted); font-size: 0.74rem; }
-    .mv-tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-    .mv-tag.b { background: var(--primary-pale); color: var(--primary); }
-    .mv-tag.p { background: var(--accent-pale); color: var(--accent-dark); }
-
-    .mv-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 14px; }
-    .mv-stat { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
-    .mv-stat-n { font-size: 1.2rem; font-weight: 800; color: var(--dark); line-height: 1; }
-    .mv-stat-l { font-size: 0.66rem; color: var(--muted); margin-top: 3px; }
-
-    /* PROOF BAR */
-    .proof-bar {
-      background: var(--light);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 22px 5%;
-      text-align: center;
-    }
-    .proof-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
-    .proof-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    .proof-pill {
-      display: flex; align-items: center; gap: 7px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 100px; padding: 7px 16px;
-      font-size: 0.8rem; font-weight: 600; color: var(--text);
-    }
-    .proof-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 
     /* SECTIONS */
     .section { padding: 80px 5%; max-width: 1100px; margin: 0 auto; }
@@ -272,7 +189,6 @@
 
     /* FEATURES */
     .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-    .feat-grid .feat-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; max-width: 380px; }
     .feat-card {
       background: var(--white); border: 1px solid var(--border);
       border-radius: 14px; padding: 26px;
@@ -328,8 +244,13 @@
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .fu { opacity:0; animation: fadeUp 0.65s ease forwards; }
     .d1{animation-delay:.05s} .d2{animation-delay:.15s} .d3{animation-delay:.25s} .d4{animation-delay:.35s} .d5{animation-delay:.45s}
-    .reveal { opacity:1; transform:translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal { opacity:0; transform:translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* checklist items */
+    .check-list { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .check-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text); font-weight: 500; }
+    .check-dot { width: 20px; height: 20px; background: var(--primary-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
     /* RESPONSIVE */
     @media(max-width:900px) {
@@ -338,6 +259,8 @@
       .hiw-steps { grid-template-columns:repeat(2,1fr); }
       .hiw-steps::before { display:none; }
       .roles-grid { grid-template-columns:repeat(2,1fr); }
+      .showcase-row { grid-template-columns: 1fr !important; gap: 36px !important; }
+      .showcase-row.reverse { direction: ltr !important; }
     }
     @media(max-width:560px) {
       .feat-grid, .roles-grid, .hiw-steps { grid-template-columns:1fr; }
@@ -351,7 +274,7 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">
-      <img src="baylog logo blank.png" alt="BayLog" />
+      <img src="BAYLOG_COMBO.svg" alt="BayLog" />
     </a>
     <div class="nav-right">
       <a href="https://app.baylog.app" class="btn-nav" target="_blank" rel="noopener">
@@ -363,31 +286,30 @@
 
   <!-- HERO -->
   <div class="hero-bg">
-
   <div style="max-width:1100px;margin:0 auto;padding:0 5%;">
     <div class="hero-wrap" style="padding-left:0;padding-right:0;">
 
       <div>
         <p class="fu d1" style="font-size:0.75rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;">Work Hour Tracking &nbsp;·&nbsp; Collision Repair</p>
-        <h1 class="hero-title fu d2" style="font-size:clamp(2.6rem,5vw,3.8rem);line-height:1.05;">
+        <h1 class="hero-title fu d2">
           Every RO.<br/>
           Every Hour.<br/>
-          <span style="color:var(--accent);">Accounted For.</span>
+          <span>Accounted For.</span>
         </h1>
         <div class="fu d3" style="width:48px;height:3px;background:var(--primary);border-radius:2px;margin:24px 0;"></div>
-        <p class="hero-sub fu d4" style="font-size:0.97rem;color:var(--muted);line-height:1.75;max-width:400px;">
+        <p class="hero-sub fu d4">
           One place to see who worked, what RO, and how many hours — every pay period, every time.
         </p>
         <div class="hero-cta fu d5">
-<a href="mailto:support@baylog.app?subject=BayLog%20Early%20Access&body=Hi%2C%20I%27m%20interested%20in%20BayLog%20early%20access.%20My%20shop%20name%20is%3A%20" class="btn-primary">
-  Join the Waitlist
-</a>            Get Started
+          <a href="mailto:support@baylog.app?subject=BayLog%20Early%20Access&body=Hi%2C%20I%27m%20interested%20in%20BayLog%20early%20access.%20My%20shop%20name%20is%3A%20" class="btn-primary">
+            Join the Waitlist
           </a>
         </div>
       </div>
 
+      <!-- HERO VISUAL -->
       <div class="hero-visual fu d5">
-        <!-- Header bar -->
+        <!-- Header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
           <div>
             <div style="font-size:0.95rem;font-weight:800;color:var(--dark);">Work Hours</div>
@@ -400,11 +322,11 @@
         </div>
 
         <!-- Scoreboard -->
-        <div style="background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
           <div style="display:flex;gap:20px;">
-            <div style="font-size:0.78rem;color:var(--muted);">Paint <strong style="color:var(--primary);">46.1h</strong></div>
-            <div style="font-size:0.78rem;color:var(--muted);">Denib <strong style="color:#7FA89B;">1.7h</strong></div>
-            <div style="font-size:0.78rem;color:var(--muted);">Body <strong style="color:var(--text);">0h</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted);">Paint <strong style="color:var(--paint);">46.1h</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted);">Denib <strong style="color:var(--denib);">1.7h</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted);">Body <strong style="color:var(--body);">0h</strong></div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:0.62rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;">Total</div>
@@ -417,44 +339,40 @@
           <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:7px 12px;background:var(--light);border-bottom:1px solid var(--border);">
             <div style="font-size:0.62rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">RO #</div>
             <div style="font-size:0.62rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Vehicle</div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;">Paint</div>
-            <div style="font-size:0.62rem;font-weight:700;color:#7FA89B;letter-spacing:0.08em;text-transform:uppercase;">Denib</div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--primary);letter-spacing:0.08em;text-transform:uppercase;">Body</div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--text);letter-spacing:0.08em;text-transform:uppercase;">Total</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--paint);letter-spacing:0.08em;text-transform:uppercase;">Paint</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--denib);letter-spacing:0.08em;text-transform:uppercase;">Denib</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--body);letter-spacing:0.08em;text-transform:uppercase;">Body</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Total</div>
           </div>
-          <!-- Row 1 -->
           <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">62663</div>
             <div style="font-size:0.76rem;color:var(--muted);">Kia · SWP</div>
-            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">25h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--paint);">25h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">25h</div>
           </div>
-          <!-- Row 2 -->
           <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">38291</div>
             <div style="font-size:0.76rem;color:var(--muted);">Hyundai · C5G</div>
-            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">12h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--paint);">12h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">12h</div>
           </div>
-          <!-- Row 3 -->
           <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">51047</div>
             <div style="font-size:0.76rem;color:var(--muted);">Tesla · PPSW</div>
-            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">5.6h</div>
-            <div style="font-size:0.78rem;font-weight:600;color:#7FA89B;">1.2h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--paint);">5.6h</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--denib);">1.2h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">6.8h</div>
           </div>
-          <!-- Row 4 -->
           <div style="display:grid;grid-template-columns:1fr 1.2fr 0.9fr 0.7fr 0.7fr 0.7fr;padding:9px 12px;align-items:center;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">29874</div>
             <div style="font-size:0.76rem;color:var(--muted);">BMW · 300Y</div>
-            <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">3.5h</div>
-            <div style="font-size:0.78rem;font-weight:600;color:#7FA89B;">0.5h</div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--paint);">3.5h</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--denib);">0.5h</div>
             <div style="font-size:0.78rem;color:var(--muted);">0h</div>
             <div style="font-size:0.78rem;font-weight:700;color:var(--accent);">4h</div>
           </div>
@@ -465,39 +383,27 @@
   </div>
   </div>
 
-  <!-- PROOF BAR -->
-  <div class="proof-bar reveal">
-    <div class="proof-label">Designed around how body shops actually work</div>
-    <div class="proof-pills">
-      <div class="proof-pill"><span class="proof-dot"></span>RO-Based Logging</div>
-      <div class="proof-pill"><span class="proof-dot"></span>Pay Period Management</div>
-      <div class="proof-pill"><span class="proof-dot"></span>PDF & Excel Export</div>
-      <div class="proof-pill"><span class="proof-dot"></span>Multi-Shop Support</div>
-      <div class="proof-pill"><span class="proof-dot"></span>Role-Based Access</div>
-    </div>
-  </div>
-
   <!-- APP SHOWCASE -->
   <div style="background:var(--light);border-bottom:1px solid var(--border);padding:80px 5%;">
     <div style="max-width:1100px;margin:0 auto;">
 
       <!-- Row 1: Hour Logging -->
-      <div class="reveal visible" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;">
+      <div class="showcase-row reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;">
         <div>
           <span class="eyebrow">Hour Logging</span>
           <h3 style="font-size:1.7rem;font-weight:800;color:var(--dark);letter-spacing:-0.02em;line-height:1.15;margin:10px 0 14px;">Every RO logged.<br/>Zero guesswork.</h3>
           <p style="font-size:0.92rem;color:var(--muted);line-height:1.75;">Technicians log hours directly against a Repair Order number. Paint, body, and denib hours tracked separately — so payroll is always accurate.</p>
-          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="check-list">
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               RO number, vehicle, and paint code per entry
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               Separate paint, denib, and body hour columns
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               Stat holiday entries tracked separately
             </div>
           </div>
@@ -508,46 +414,46 @@
           <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;gap:4px;padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:4px;">
             <div style="font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">RO #</div>
             <div style="font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Vehicle</div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;">Paint</div>
-            <div style="font-size:0.62rem;font-weight:700;color:#7FA89B;text-transform:uppercase;letter-spacing:0.06em;">Denib</div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.06em;">Body</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--paint);text-transform:uppercase;letter-spacing:0.06em;">Paint</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--denib);text-transform:uppercase;letter-spacing:0.06em;">Denib</div>
+            <div style="font-size:0.62rem;font-weight:700;color:var(--body);text-transform:uppercase;letter-spacing:0.06em;">Body</div>
           </div>
           <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
             <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">71204</div>
             <div style="font-size:0.72rem;color:var(--muted);">Honda · NH883P</div>
-            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">8h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--paint);">8h</div>
             <div style="font-size:0.75rem;color:var(--muted);">0h</div>
             <div style="font-size:0.75rem;color:var(--muted);">0h</div>
           </div>
           <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
             <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">68391</div>
             <div style="font-size:0.72rem;color:var(--muted);">Toyota · 040</div>
-            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">12h</div>
-            <div style="font-size:0.75rem;font-weight:600;color:#7FA89B;">1.5h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--paint);">12h</div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--denib);">1.5h</div>
             <div style="font-size:0.75rem;color:var(--muted);">0h</div>
           </div>
           <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;border-bottom:1px solid var(--border);">
             <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">74512</div>
             <div style="font-size:0.72rem;color:var(--muted);">Ford · UX</div>
-            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">5h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--paint);">5h</div>
             <div style="font-size:0.75rem;color:var(--muted);">0h</div>
-            <div style="font-size:0.75rem;font-weight:700;color:var(--primary);">6h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--body);">6h</div>
           </div>
           <div style="display:grid;grid-template-columns:0.8fr 1.1fr 0.65fr 0.55fr 0.55fr;padding:7px 0;">
             <div style="font-size:0.75rem;font-weight:600;color:var(--dark);">69874</div>
             <div style="font-size:0.72rem;color:var(--muted);">BMW · A96</div>
-            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);">3.5h</div>
-            <div style="font-size:0.75rem;font-weight:600;color:#7FA89B;">0.5h</div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--paint);">3.5h</div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--denib);">0.5h</div>
             <div style="font-size:0.75rem;color:var(--muted);">0h</div>
           </div>
           <div style="margin-top:12px;display:flex;justify-content:flex-end;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--white);background:var(--primary);border-radius:6px;padding:5px 12px;cursor:pointer;">Export PDF</div>
+            <div style="font-size:0.7rem;font-weight:700;color:var(--white);background:var(--primary);border-radius:6px;padding:5px 12px;">Export PDF</div>
           </div>
         </div>
       </div>
 
       <!-- Row 2: Pay Periods -->
-      <div class="reveal visible" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+      <div class="showcase-row reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
         <!-- Pay period list mockup -->
         <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 4px 24px rgba(79,109,122,0.08);">
           <div style="font-size:0.8rem;font-weight:700;color:var(--dark);margin-bottom:14px;">Pay Periods</div>
@@ -557,32 +463,32 @@
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-03-04 ~ 03-17</div>
-            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--primary);background:rgba(79,109,122,0.1);padding:3px 9px;border-radius:100px;">Submitted</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-02-17 ~ 03-03</div>
-            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--primary);background:rgba(79,109,122,0.1);padding:3px 9px;border-radius:100px;">Submitted</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:8px;">
             <div style="font-size:0.78rem;font-weight:600;color:var(--dark);">2026-02-03 ~ 02-16</div>
-            <div style="font-size:0.68rem;font-weight:700;color:#7FA89B;background:rgba(127,168,155,0.12);padding:3px 9px;border-radius:100px;">Submitted</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--primary);background:rgba(79,109,122,0.1);padding:3px 9px;border-radius:100px;">Submitted</div>
           </div>
         </div>
         <div>
           <span class="eyebrow">Pay Periods</span>
           <h3 style="font-size:1.7rem;font-weight:800;color:var(--dark);letter-spacing:-0.02em;line-height:1.15;margin:10px 0 14px;">Open, track, close.<br/>Repeat every period.</h3>
           <p style="font-size:0.92rem;color:var(--muted);line-height:1.75;">Create a pay period, let your team log hours, then close and export when ready. Submitted periods are locked — no accidental edits before payroll runs.</p>
-          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="check-list">
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               Bi-weekly periods with one-click open/close
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               Submitted periods locked from editing
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--text);font-weight:500;">
-              <div style="width:20px;height:20px;background:var(--primary-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="check-item">
+              <div class="check-dot"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4F6D7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               Full history grouped by year
             </div>
           </div>
@@ -622,7 +528,7 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c0-3.314 2.686-5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="feat-title">Role-Based Access</div>
-        <div class="feat-desc">Six roles: Owner, GM, Shop Manager, Accountant, Painter, and Collision Tech. Each sees only what they need. Multi-shop and multi-company supported.</div>
+        <div class="feat-desc">Six roles: Owner, GM, Shop Manager, Accountant, Automotive Refinisher, and Collision Tech. Each sees only what they need. Multi-shop and multi-company supported.</div>
       </div>
 
       <div class="feat-card">
@@ -638,12 +544,16 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L10 6M10 14L10 18M2 10L6 10M14 10L18 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
         <div class="feat-title">Vacation Pay</div>
-        <div class="feat-desc">Technicians request vacation pay directly in the app. Manager signs off, accountant processes and records payment. PDF output included.</div>
+        <div class="feat-desc">Technicians request vacation pay directly in the app. Manager reviews, accountant processes. Digital signature and PDF output included.</div>
       </div>
 
+      <!-- Smart Notifications — bell icon -->
       <div class="feat-card">
         <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2a6 6 0 0 1 6 6c0 4-6 10-6 10S4 12 4 8a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2a6 6 0 0 1 6 6c0 3.5 1 5 1 5H3s1-1.5 1-5a6 6 0 0 1 6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.5 16a1.5 1.5 0 0 0 3 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="feat-title">Smart Notifications</div>
         <div class="feat-desc">Role-specific NEW indicators, Watch List alerts for ROs needing updates, and vacation pay request notifications — all tailored to each user's role.</div>
@@ -710,19 +620,19 @@
         <div><div class="role-name">General Manager</div><div class="role-desc">Manages all locations under the company.</div></div>
       </div>
       <div class="role-card">
-        <div class="role-dot" style="background:#7FA89B"></div>
+        <div class="role-dot" style="background:#7B8FA0"></div>
         <div><div class="role-name">Shop Manager</div><div class="role-desc">Full control over their assigned shop only.</div></div>
       </div>
       <div class="role-card">
-        <div class="role-dot" style="background:#A8A87F"></div>
+        <div class="role-dot" style="background:#9B7BB8"></div>
         <div><div class="role-name">Accountant</div><div class="role-desc">Read access + export across all shops.</div></div>
       </div>
       <div class="role-card">
-        <div class="role-dot" style="background:#8FA06B"></div>
+        <div class="role-dot" style="background:#4F6D7A"></div>
         <div><div class="role-name">Automotive Refinisher</div><div class="role-desc">Logs and views their own paint hours only.</div></div>
       </div>
       <div class="role-card">
-        <div class="role-dot" style="background:#6B8FA0"></div>
+        <div class="role-dot" style="background:#7B8FA0"></div>
         <div><div class="role-name">Collision Tech</div><div class="role-desc">Logs and views their own body hours only.</div></div>
       </div>
     </div>
@@ -734,18 +644,16 @@
       <h2 class="cta-title">Ready to Bring Order to Your Shop Floor?</h2>
       <p class="cta-sub">Replace spreadsheets and guesswork with a system built for the way collision repair shops actually work.</p>
       <a href="mailto:support@baylog.app?subject=BayLog%20Early%20Access&body=Hi%2C%20I%27m%20interested%20in%20BayLog%20early%20access.%20My%20shop%20name%20is%3A%20" class="btn-cta">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
-  Join the Waitlist
-</a>
-        Get Started with BayLog
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13ZM6.5 5v6l5-3-5-3Z" fill="currentColor"/></svg>
+        Join the Waitlist
       </a>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <a href="#" class="footer-logo"><img src="baylog logo blank.png" alt="BayLog" /></a>
-    <span class="footer-copy">© 2025 BayLog. All rights reserved.</span>
+    <a href="#" class="footer-logo"><img src="BAYLOG_COMBO.svg" alt="BayLog" /></a>
+    <span class="footer-copy">© 2026 BayLog. All rights reserved.</span>
     <div class="footer-links">
       <a href="/privacy.html">Privacy</a>
       <a href="/terms.html">Terms</a>
@@ -753,7 +661,13 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if(e.isIntersecting){ e.target.classLis
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
